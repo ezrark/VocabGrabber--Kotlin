@@ -26,8 +26,8 @@ class VocabGrabber {
             definitions = ArrayList(1)
             POS = ArrayList(1)
             //println("type the word")
-            val appId = "5eb25c00"
-            val appKey = "832b0e87de4fd6f4da78496826b620e6"
+            val appId = "*****"
+            val appKey = "**********"
             
             try {
                 val url = URL(dictionaryEntries(word))
