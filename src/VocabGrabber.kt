@@ -57,7 +57,6 @@ class VocabGrabber {
                         //defCount == 0
                     }
                 }
-                return definitions
             } catch (e: Exception) {
                 //e.printStackTrace()
                 //definitions.add(e.toString())
@@ -76,14 +75,28 @@ class VocabGrabber {
         
         fun addToFile(fileName: File, word: String, part: String, defin: String) {
             //val writer = FileWriter
-            fileName.appendText("$word $part: $defin\n")
+            fileName.appendText("""\item """ + "$word $part: $defin\n")
             //File("vocab.txt").writeText(word + ": " + defin)
+        }
+        
+        fun prepTex(fileName: File) {
+            fileName.appendText("""\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[letterpaper, portrait, margin=1in]{geometry}
+\usepackage{setspace}
+
+\begin{document}
+\doublespacing
+\begin{enumerate}
+""")
         }
     }
 }
 
 fun main(args: Array<String>) {
-    val file = File("vocab.txt")
+    val file = File("vocab.tex")
+    VocabGrabber.Companion.prepTex(file)
     do {
         println("Type the word")
         val word = VocabGrabber.Companion.scanner.next()
@@ -93,6 +106,10 @@ fun main(args: Array<String>) {
         }
         println("Which definition?")
         val defToUse: Int = VocabGrabber.Companion.scanner.nextInt()
-        VocabGrabber.Companion.addToFile(file, word, "(${VocabGrabber.Companion.findPart(defToUse, VocabGrabber.Companion.POS)})", wordArray[defToUse - 1])
-    } while (3==3)
+        VocabGrabber.Companion.addToFile(file, word.capitalize(), "(${VocabGrabber.Companion.findPart(defToUse, VocabGrabber.Companion.POS)})".capitalize(), wordArray[defToUse - 1].capitalize())
+        println("q to quit")
+    } while (VocabGrabber.Companion.scanner.next() != "q")
+    file.appendText("""\end{enumerate}
+        |\end{document}
+    """.trimMargin())
 }
